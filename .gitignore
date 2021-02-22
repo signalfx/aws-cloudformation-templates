@@ -1,0 +1,4 @@
+.idea
+**/taskcat_outputs
+cf-tmp-env
+logs/.tmp
