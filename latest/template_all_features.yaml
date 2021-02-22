@@ -1,0 +1,98 @@
+#====== DO NOT DEPLOY THIS FILE TO PRODUCTION. =======================================================================================
+#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_all_features.yaml =====
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Splunk Logs and Metric Streams Integration
+
+Parameters:
+  SplunkAPIKey:
+    Type: String
+    NoEcho: true
+    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+  SplunkLogIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url with an additional suffix 'v1/log'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/log"
+  SplunkMetricIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com"
+  SplunkCloudIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url with an additional suffix '/v1/cloudwatch_metric_stream'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/cloudwatch_metric_stream."
+  EnabledRegions:
+    Type: CommaDelimitedList
+    Description: "Comma-delimited list of regions where you want to collect logs and metric streams. For example: \"us-east-1,eu-central-0,ap-south-1\"."
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: Required Parameters
+        Parameters:
+          - SplunkAPIKey
+          - EnabledRegions
+          - SplunkMetricIngestUrl
+          - SplunkLogIngestUrl
+          - SplunkCloudIngestUrl
+    ParameterLabels:
+      SplunkAPIKey:
+        default: "Access Token"
+      EnabledRegions:
+        default: "Regions to deploy to"
+      SplunkMetricIngestUrl:
+        default: "Ingest url"
+      SplunkLogIngestUrl:
+        default: "Ingest url followed with log path"
+      SplunkCloudIngestUrl:
+        default: "Ingest url followed with metric streams path"
+
+Resources:
+  SplunkAwsLogCollectorGlobalResources:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_per_account.yaml
+
+  SplunkMetricStreamsGlobalResources:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_per_account.yaml
+
+  SplunkAwsLogsCollectorRegionalResources:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      StackSetName: SplunkAwsLogsCollectorRegionalResources
+      Description: Create regional resources for Splunk AWS Logs Collector
+      PermissionModel: SELF_MANAGED
+      StackInstancesGroup:
+        - DeploymentTargets:
+            Accounts:
+              - !Ref "AWS::AccountId"
+          Regions: !Ref EnabledRegions
+      Parameters:
+        - ParameterKey: SplunkAPIKey
+          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkLogIngestUrl
+          ParameterValue: !Ref SplunkLogIngestUrl
+        - ParameterKey: SplunkMetricIngestUrl
+          ParameterValue: !Ref SplunkMetricIngestUrl
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
+
+  SplunkMetricStreamsRegionalResources:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      StackSetName: SplunkMetricStreamsRegionalResources
+      Description: Create regional resources for Splunk integration with CloudWatch Metric Streams
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
+      PermissionModel: SELF_MANAGED
+      StackInstancesGroup:
+        - DeploymentTargets:
+            Accounts:
+              - !Ref "AWS::AccountId"
+          Regions: !Ref EnabledRegions
+      Parameters:
+        - ParameterKey: SplunkAPIKey
+          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkCloudIngestUrl
+          ParameterValue: !Ref SplunkCloudIngestUrl
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
+

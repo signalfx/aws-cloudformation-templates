@@ -1,0 +1,65 @@
+#====== DO NOT DEPLOY THIS FILE TO PRODUCTION. =======================================================================================
+#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_logs.yaml =====
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Splunk Logs and Metric Streams Integration
+
+Parameters:
+  SplunkAPIKey:
+    Type: String
+    NoEcho: true
+    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+  SplunkLogIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url with an additional suffix 'v1/log'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints."
+  SplunkMetricIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints."
+  EnabledRegions:
+    Type: CommaDelimitedList
+    Description: "Comma-delimited list of regions where you want to collect logs. For example: \"us-east-1,eu-central-0,ap-south-1\"."
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: Required Parameters
+        Parameters:
+          - SplunkAPIKey
+          - SplunkLogIngestUrl
+          - SplunkMetricIngestUrl
+    ParameterLabels:
+      SplunkAPIKey:
+        default: "Access Token"
+      SplunkLogIngestUrl:
+        default: "Real-time Data Ingest endpoint with log path"
+      SplunkMetricIngestUrl:
+        default: "Real-time Data Ingest endpoint"
+      EnabledRegions:
+        default: "Regions to deploy to"
+
+Resources:
+  SplunkAwsLogsCollectorRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_per_account.yaml
+
+  SplunkAwsLogsCollectorRegionalResources:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      StackSetName: SplunkAwsLogsCollectorRegionalResources
+      Description: Create regional resources for Splunk AWS Logs Collector
+      PermissionModel: SELF_MANAGED
+      StackInstancesGroup:
+        - DeploymentTargets:
+            Accounts:
+              - !Ref "AWS::AccountId"
+          Regions: !Ref EnabledRegions
+      Parameters:
+        - ParameterKey: SplunkAPIKey
+          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkLogIngestUrl
+          ParameterValue: !Ref SplunkLogIngestUrl
+        - ParameterKey: SplunkMetricIngestUrl
+          ParameterValue: !Ref SplunkMetricIngestUrl
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml

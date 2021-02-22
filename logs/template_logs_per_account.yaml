@@ -1,0 +1,39 @@
+#====== DO NOT DEPLOY THIS FILE TO PRODUCTION. =======================================================================================
+#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_logs_per_account.yaml =====
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Global resources for Splunk Logs Integration.
+
+Resources:
+  SplunkAwsLogsCollectorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: splunk-log-collector
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      Policies:
+        - PolicyName: SplunkAwsLogsCollectorRolePolicyTag
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'tag:GetResources'
+                Resource: '*'
+                Sid: AWSGetTagsOfResources
+        - PolicyName: SplunkAwsLogsCollectorRolePolicyS3
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                Resource: '*'
+                Sid: GetS3LogObjects
