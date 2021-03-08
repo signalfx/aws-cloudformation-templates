@@ -2,3 +2,6 @@
 **/taskcat_outputs
 cf-tmp-env
 logs/.tmp
+**/.taskcat
+bin
+cf-tmp-env

@@ -1,0 +1,52 @@
+#====== DO NOT DEPLOY THIS FILE. =======================================================================================
+#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_metric_streams.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Regional resources for Splunk AWS Metric Streams Integration.
+
+Parameters:
+  SplunkAPIKey:
+    Type: String
+    NoEcho: true
+    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+  SplunkCloudIngestUrl:
+    Type: String
+    Description: "Real-time Data Ingest url with an additional suffix '/v1/cloudwatch_metric_stream'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/cloudwatch_metric_stream."
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: Required Parameters
+        Parameters:
+          - SplunkAPIKey
+          - SplunkCloudIngestUrl
+    ParameterLabels:
+      SplunkAPIKey:
+        default: "Access Token"
+      SplunkCloudIngestUrl:
+        default: "Ingest url followed with metric streams path"
+
+Resources:
+  SplunkMetricStreamsKinesisFirehose:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamType: DirectPut
+      DeliveryStreamName: !Sub 'splunk-metric-streams-${AWS::Region}'
+      HttpEndpointDestinationConfiguration:
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 1
+        EndpointConfiguration:
+          AccessKey: !Ref SplunkAPIKey
+          Url: !Ref SplunkCloudIngestUrl
+        RequestConfiguration:
+          ContentEncoding: GZIP
+        S3BackupMode: FailedDataOnly
+        S3Configuration:
+          BucketARN: !Sub 'arn:aws:s3:::splunk-metric-streams-s3-${AWS::AccountId}'
+          CompressionFormat: GZIP
+          RoleARN: !Sub 'arn:aws:iam::${AWS::Region}:role/splunk-metric-streams-s3'
+      Tags:
+        - Key: splunk-metric-streams-firehose
+          Value: !Sub '${AWS::Region}'
