@@ -9,15 +9,9 @@ Parameters:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
-  SplunkLogIngestUrl:
-    Type: String
-    Description: "Real-time Data Ingest url with an additional suffix 'v1/log'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/log"
-  SplunkMetricIngestUrl:
+  SplunkIngestUrl:
     Type: String
     Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com."
-  SplunkCloudIngestUrl:
-    Type: String
-    Description: "Real-time Data Ingest url with an additional suffix '/v1/cloudwatch_metric_stream'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/cloudwatch_metric_stream."
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
@@ -39,9 +33,7 @@ Metadata:
           default: Required Parameters
         Parameters:
           - SplunkAPIKey
-          - SplunkMetricIngestUrl
-          - SplunkCloudIngestUrl
-          - SplunkLogIngestUrl
+          - SplunkIngestUrl
       -
         Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
@@ -52,12 +44,8 @@ Metadata:
     ParameterLabels:
       SplunkAPIKey:
         default: "Access Token"
-      SplunkMetricIngestUrl:
+      SplunkIngestUrl:
         default: "Ingest url"
-      SplunkCloudIngestUrl:
-        default: "Ingest url followed with log path"
-      SplunkLogIngestUrl:
-        default: "Ingest url followed with log path"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -73,10 +61,8 @@ Resources:
       Parameters:
         - ParameterKey: SplunkAPIKey
           ParameterValue: !Ref SplunkAPIKey
-        - ParameterKey: SplunkLogIngestUrl
-          ParameterValue: !Ref SplunkLogIngestUrl
-        - ParameterKey: SplunkMetricIngestUrl
-          ParameterValue: !Ref SplunkMetricIngestUrl
+        - ParameterKey: SplunkIngestUrl
+          ParameterValue: !Ref SplunkIngestUrl
         - ParameterKey: LambdaDeploymentPackageS3Bucket
           ParameterValue: !Ref LambdaDeploymentPackageS3Bucket
         - ParameterKey: LambdaDeploymentPackageS3Key
@@ -90,5 +76,5 @@ Resources:
       Parameters:
         - ParameterKey: SplunkAPIKey
           ParameterValue: !Ref SplunkAPIKey
-        - ParameterKey: SplunkCloudIngestUrl
-          ParameterValue: !Ref SplunkCloudIngestUrl
+        - ParameterKey: SplunkIngestUrl
+          ParameterValue: !Ref SplunkIngestUrl

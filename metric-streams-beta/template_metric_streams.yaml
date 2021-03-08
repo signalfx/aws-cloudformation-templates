@@ -8,9 +8,9 @@ Parameters:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
-  SplunkCloudIngestUrl:
+  SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest url with an additional suffix '/v1/cloudwatch_metric_stream'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com/v1/cloudwatch_metric_stream."
+    Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com"
   EnabledRegions:
     Type: CommaDelimitedList
     Description: "Comma-delimited list of regions where you want to collect metric streams. For example: \"us-east-1,eu-central-0,ap-south-1\"."
@@ -24,21 +24,16 @@ Metadata:
         Parameters:
           - SplunkAPIKey
           - EnabledRegions
-          - SplunkCloudIngestUrl
+          - SplunkIngestUrl
     ParameterLabels:
       SplunkAPIKey:
         default: "Access Token"
       EnabledRegions:
         default: "Regions to deploy to"
-      SplunkCloudIngestUrl:
-        default: "Ingest url followed with metric streams path"
+      SplunkIngestUrl:
+        default: "Real-time Data Ingest endpoint"
 
 Resources:
-  SplunkMetricStreamsPerAccountResources:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_per_account.yaml
-      TimeoutInMinutes: 10
 
   SplunkMetricStreamsRegionalResources:
     Type: AWS::CloudFormation::StackSet
@@ -56,6 +51,6 @@ Resources:
       Parameters:
         - ParameterKey: SplunkAPIKey
           ParameterValue: !Ref SplunkAPIKey
-        - ParameterKey: SplunkCloudIngestUrl
-          ParameterValue: !Ref SplunkCloudIngestUrl
+        - ParameterKey: SplunkIngestUrl
+          ParameterValue: !Ref SplunkIngestUrl
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
