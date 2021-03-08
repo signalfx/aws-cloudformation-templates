@@ -42,12 +42,22 @@ jobs:
 workflows:
   main:
     jobs:
-      - cfn-lint
+      - cfn-lint:
+          # filters are required since `release-to-environment` with release env has tag filters and requires 'cfn-lint'
+          # see doc https://circleci.com/docs/2.0/workflows/#executing-workflows-for-a-git-tag
+          filters:
+            tags:
+              only: /.*/
       - release-to-environment:
+          context: aws-rnd-lambda-extension-user
           environment: test
           requires:
             - cfn-lint
+          filters:
+            branches:
+              only: /pipeline-.*/
       - release-to-environment:
+          context: aws-rnd-lambda-extension-user
           environment: stage
           requires:
             - cfn-lint
@@ -57,6 +67,7 @@ workflows:
             tags:
               ignore: /^\d+\.\d+\.\d+$/
       - release-to-environment:
+          context: aws-rnd-lambda-extension-user
           environment: release
           requires:
             - cfn-lint

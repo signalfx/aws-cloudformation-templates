@@ -1,11 +1,39 @@
 # Maintainers info
 
-### Release process 
+### Tooling
+* [pre-commit](https://pre-commit.com/)
+* [cfn-lint](https://github.com/aws-cloudformation/cfn-python-lint)
+* [taskcat](https://github.com/aws-quickstart/taskcat) (WIP)
 
-* This repo uses `pre-commit` to run `cfn-lint`.
-* Commits pushed to any branch will result in the upload of the test templates internal S3 location.
-* All commits to `main` branch will result in the upload of the templates in stage version to internal S3 location.
-* To release templates to publicly accessible location, tag the commit in `main` branch with a sem-ver git tag, for example `1.0.0`.
+You don't have to install any of that locally, but if you do, cfn-lint & pre-commit will make your life easier.
+In addition, if you're changing circleci pipelines, `circleci`'s local cli is great for validating config and running pipelines locally  (`circleci config validate`)
+
+### Releasing
+We use CircleCi for build process.
+* Every commit to each branch will trigger cfn-lint. If you want your commits to automatically publish test version to rnd account in AWS, use a branch name starting with "pipeline". If you push a commit to a branch prefixed with "pipeline", the test artifact will be uploaded to AWS.
+
+* Every commit to the main branch will trigger cfn-lint and publication of the CF templates in the staging version.
+
+* To release a public version, tag a chosen commit with a sem-ver git tag, for example `1.0.0`.
+
+Adding tag `1.0.0` to commit `9fceb02`:
+```
+git tag -a 1.0.0 9fceb02
+git push origin main --tags
+```
+
+Deleting tag `1.0.0` if you made a mistake:
+ 
+```
+# delete local tag '1.0.0'
+git tag -d 1.0.0
+# delete remote tag '1.0.0'
+git push origin :refs/tags/1.0.0
+
+# alternative approach
+git push --delete origin 1.0.0
+git tag -d 1.0.0
+```
 
 ### E2E testing using TaskCat
 
