@@ -45,7 +45,7 @@ Metadata:
       SplunkAPIKey:
         default: "Access Token"
       SplunkIngestUrl:
-        default: "Ingest url"
+        default: "Real-time Data Ingest endpoint"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -57,7 +57,7 @@ Resources:
   SplunkAwsLogsCollector:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://o11y-public/logs/packaged_logs_regional.test.yaml
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
       Parameters:
         - ParameterKey: SplunkAPIKey
           ParameterValue: !Ref SplunkAPIKey
@@ -72,7 +72,7 @@ Resources:
   SplunkAwsMetricStreams:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://o11y-public/logs/packaged_metric_streams_regional.test.yaml
+      TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
       Parameters:
         - ParameterKey: SplunkAPIKey
           ParameterValue: !Ref SplunkAPIKey
