@@ -49,6 +49,7 @@ workflows:
             tags:
               only: /.*/
       - release-to-environment:
+          name: "Release to test directory in AWS"
           context: aws-rnd-lambda-extension-user
           environment: test
           requires:
@@ -57,6 +58,7 @@ workflows:
             branches:
               only: /pipeline-.*/
       - release-to-environment:
+          name: "Release to stage directory in AWS"
           context: aws-rnd-lambda-extension-user
           environment: stage
           requires:
@@ -67,6 +69,7 @@ workflows:
             tags:
               ignore: /^\d+\.\d+\.\d+$/
       - release-to-environment:
+          name: "Release to release directory in AWS. Add public permissions."
           context: aws-rnd-lambda-extension-user
           environment: release
           requires:
