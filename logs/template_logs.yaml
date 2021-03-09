@@ -1,7 +1,7 @@
 #====== DO NOT DEPLOY THIS FILE TO PRODUCTION. =======================================================================================
 #====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_logs.yaml =====
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Splunk Logs and Metric Streams Integration
+Description: Splunk Logs Integration
 
 Parameters:
   SplunkAPIKey:
@@ -24,6 +24,7 @@ Metadata:
         Parameters:
           - SplunkAPIKey
           - SplunkIngestUrl
+          - EnabledRegions
     ParameterLabels:
       SplunkAPIKey:
         default: "Access Token"
@@ -33,11 +34,12 @@ Metadata:
         default: "Regions to deploy to"
 
 Resources:
-
   SplunkAwsLogsCollectorRegionalResources:
     Type: AWS::CloudFormation::StackSet
     Properties:
       StackSetName: SplunkAwsLogsCollectorRegionalResources
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
       Description: Create regional resources for Splunk AWS Logs Collector
       PermissionModel: SELF_MANAGED
       StackInstancesGroup:

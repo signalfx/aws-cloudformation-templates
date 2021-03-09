@@ -40,6 +40,8 @@ Resources:
     Properties:
       StackSetName: SplunkAwsLogsCollectorRegionalResources
       Description: Create regional resources for Splunk AWS Logs Collector
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
       PermissionModel: SELF_MANAGED
       StackInstancesGroup:
         - DeploymentTargets:
