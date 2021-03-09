@@ -13,7 +13,7 @@ Parameters:
     Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com"
   EnabledRegions:
     Type: CommaDelimitedList
-    Description: "Comma-delimited list of regions where you want to collect metric streams. For example: \"us-east-1,eu-central-0,ap-south-1\"."
+    Description: "Comma-delimited list of regions where you want to collect metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
 
 Metadata:
   AWS::CloudFormation::Interface:
