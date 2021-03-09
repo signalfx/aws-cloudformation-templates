@@ -7,20 +7,16 @@ project:
     default: integrations
   build_submodules: false
 tests:
-  logs-once-per-account:
-    template: ./.tmp/template_logs_per_account.yaml
   logs-regional:
     template: ./.tmp/template_logs_regional.yaml
     parameters:
       SplunkAPIKey: "sampletoken"
-      SplunkLogIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
-      SplunkMetricIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
+      SplunkIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
   logs-stackset:
     regions:
       - eu-central-1
     template: ./.tmp/template_logs.yaml
     parameters:
       SplunkAPIKey: "sampletoken"
-      SplunkLogIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
-      SplunkMetricIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
+      SplunkIngestUrl: "https://lab0.signalfx.com/thiswillnotwork"
       EnabledRegions: "eu-central-1,eu-south-1"

@@ -8,12 +8,9 @@ Parameters:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
-  SplunkLogIngestUrl:
+  SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest url with an additional suffix 'v1/log'. Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints."
-  SplunkMetricIngestUrl:
-    Type: String
-    Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints."
+    Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints."
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
@@ -35,8 +32,7 @@ Metadata:
           default: Required Parameters
         Parameters:
           - SplunkAPIKey
-          - SplunkLogIngestUrl
-          - SplunkMetricIngestUrl
+          - SplunkIngestUrl
       -
         Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
@@ -47,9 +43,7 @@ Metadata:
     ParameterLabels:
       SplunkAPIKey:
         default: "Access Token"
-      SplunkLogIngestUrl:
-        default: "Real-time Data Ingest endpoint with log path"
-      SplunkMetricIngestUrl:
+      SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
@@ -63,6 +57,40 @@ Conditions:
     !Equals [!Ref UseHostedLambdaDeploymentPackage, "true"]
 
 Resources:
+  SplunkAwsLogsCollectorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub 'splunk-log-collector-${AWS::Region}'
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      Policies:
+        - PolicyName: SplunkAwsLogsCollectorRolePolicyTag
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'tag:GetResources'
+                Resource: '*'
+                Sid: AWSGetTagsOfResources
+        - PolicyName: SplunkAwsLogsCollectorRolePolicyS3
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                Resource: '*'
+                Sid: GetS3LogObjects
+
   SplunkAwsLogsCollector:
     Type: AWS::Lambda::Function
     Properties:
@@ -77,9 +105,9 @@ Resources:
       Environment:
         Variables:
           SPLUNK_API_KEY: !Ref SplunkAPIKey
-          SPLUNK_LOG_URL: !Ref SplunkLogIngestUrl
-          SPLUNK_METRIC_URL: !Ref SplunkMetricIngestUrl
-      Role: !Sub 'arn:aws:iam::${AWS::AccountId}:role/splunk-log-collector'
+          SPLUNK_LOG_URL: !Sub '${SplunkIngestUrl}/v1/log'
+          SPLUNK_METRIC_URL: !Ref SplunkIngestUrl
+      Role: !GetAtt SplunkAwsLogsCollectorRole.Arn
       Tags:
         - Key: splunk-log-collector-id
           Value: !Sub '${AWS::Region}'
