@@ -60,7 +60,7 @@ You will find detailed output in taskcat_outputs.
 Quick link, when opened in AWS console, will present you with a form to deploy a template which you passed as a parameter.
 
 The quick link format is:
-`https://console.aws.amazon.com/cloudformation/home?region=<region>#/stacks/create/review?templateURL=<templateUrl>&param_IntegrationId=<integrationId>&param_SplunkAPIKey=<accessKey>&param_SplunkLogIngestUrl=<logIngestUrl>&param_SplunkMetricIngestUrl=<metricIngestUrl>`
+`https://console.aws.amazon.com/cloudformation/home?region=<region>#/stacks/create/review?templateURL=<templateUrl>&param_SplunkAccessToken=<accessKey>&param_SplunkIngestUrl=<ingestUrl>`
 
 For example, if you wish to check how the published template in eu-central-1 works, login to AWS console where you want to deploy and go to:
 

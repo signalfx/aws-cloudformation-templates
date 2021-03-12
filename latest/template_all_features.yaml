@@ -4,7 +4,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Splunk Logs and Metric Streams Integration
 
 Parameters:
-  SplunkAPIKey:
+  SplunkAccessToken:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
@@ -22,11 +22,11 @@ Metadata:
         Label:
           default: Required Parameters
         Parameters:
-          - SplunkAPIKey
+          - SplunkAccessToken
           - EnabledRegions
           - SplunkIngestUrl
     ParameterLabels:
-      SplunkAPIKey:
+      SplunkAccessToken:
         default: "Access Token"
       EnabledRegions:
         default: "Regions to deploy to"
@@ -49,8 +49,8 @@ Resources:
               - !Ref "AWS::AccountId"
           Regions: !Ref EnabledRegions
       Parameters:
-        - ParameterKey: SplunkAPIKey
-          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkAccessToken
+          ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
@@ -69,8 +69,8 @@ Resources:
               - !Ref "AWS::AccountId"
           Regions: !Ref EnabledRegions
       Parameters:
-        - ParameterKey: SplunkAPIKey
-          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkAccessToken
+          ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml

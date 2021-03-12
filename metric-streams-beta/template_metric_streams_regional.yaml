@@ -4,7 +4,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Regional resources for Splunk AWS Metric Streams Integration.
 
 Parameters:
-  SplunkAPIKey:
+  SplunkAccessToken:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
@@ -19,10 +19,10 @@ Metadata:
         Label:
           default: Required Parameters
         Parameters:
-          - SplunkAPIKey
+          - SplunkAccessToken
           - SplunkIngestUrl
     ParameterLabels:
-      SplunkAPIKey:
+      SplunkAccessToken:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
@@ -107,7 +107,7 @@ Resources:
           IntervalInSeconds: 60
           SizeInMBs: 1
         EndpointConfiguration:
-          AccessKey: !Ref SplunkAPIKey
+          AccessKey: !Ref SplunkAccessToken
           Url: !Sub '${SplunkIngestUrl}/v1/cloudwatch_metric_stream'
         RequestConfiguration:
           ContentEncoding: GZIP
