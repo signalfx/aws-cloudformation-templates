@@ -58,7 +58,7 @@ There is no hosted deployment package in AWS China and Gov regions, so prior to 
 ### Template parameters
 |Parameter |Value |
 | ---------|:-------------|
-| SplunkAPIKey | the Access Token from your Splunk Observability organization   |
+| SplunkAccessToken | the Access Token from your Splunk Observability organization   |
 | SplunkIngestUrl | Real-time Data Ingest url from your account. In our example, the value would be `https://ingest.us0.signalfx.com`. Splunk uses this to ingest logs, metrics and to monitor the usage and adoption of aws-collector-lambda.   |
 | UseHostedLambdaDeploymentPackage | Change this to false if you want to use .zip archive hosted in your S3 bucket. You need to do this in Gov and China.   |
 | LambdaDeploymentPackageS3Bucket | The name of S3 bucket where you host .zip archive with Lambda code. For example, if the ARN of your archive is `arn:aws:s3:::my-bucket/my-folder/aws-log-collector.zip`, the value of this parameter is `my-bucket`. You need to pass this parameter in Gov and China.  |

@@ -5,7 +5,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Regional resources required by Splunk AWS integration with CloudWatch Metric Streams and logs collection
 
 Parameters:
-  SplunkAPIKey:
+  SplunkAccessToken:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
@@ -32,7 +32,7 @@ Metadata:
         Label:
           default: Required Parameters
         Parameters:
-          - SplunkAPIKey
+          - SplunkAccessToken
           - SplunkIngestUrl
       -
         Label:
@@ -42,7 +42,7 @@ Metadata:
           - LambdaDeploymentPackageS3Bucket
           - LambdaDeploymentPackageS3Key
     ParameterLabels:
-      SplunkAPIKey:
+      SplunkAccessToken:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
@@ -59,8 +59,8 @@ Resources:
     Properties:
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
       Parameters:
-        - ParameterKey: SplunkAPIKey
-          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkAccessToken
+          ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
         - ParameterKey: LambdaDeploymentPackageS3Bucket
@@ -74,7 +74,7 @@ Resources:
     Properties:
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
       Parameters:
-        - ParameterKey: SplunkAPIKey
-          ParameterValue: !Ref SplunkAPIKey
+        - ParameterKey: SplunkAccessToken
+          ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl

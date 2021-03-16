@@ -4,7 +4,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Splunk AWS Logs Collector lambda and permissions
 
 Parameters:
-  SplunkAPIKey:
+  SplunkAccessToken:
     Type: String
     NoEcho: true
     Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
@@ -31,7 +31,7 @@ Metadata:
         Label:
           default: Required Parameters
         Parameters:
-          - SplunkAPIKey
+          - SplunkAccessToken
           - SplunkIngestUrl
       -
         Label:
@@ -41,7 +41,7 @@ Metadata:
           - LambdaDeploymentPackageS3Bucket
           - LambdaDeploymentPackageS3Key
     ParameterLabels:
-      SplunkAPIKey:
+      SplunkAccessToken:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
@@ -104,7 +104,7 @@ Resources:
       Handler: function.lambda_handler
       Environment:
         Variables:
-          SPLUNK_API_KEY: !Ref SplunkAPIKey
+          SPLUNK_API_KEY: !Ref SplunkAccessToken
           SPLUNK_LOG_URL: !Sub '${SplunkIngestUrl}/v1/log'
           SPLUNK_METRIC_URL: !Ref SplunkIngestUrl
       Role: !GetAtt SplunkAwsLogsCollectorRole.Arn
