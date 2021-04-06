@@ -11,6 +11,13 @@ Parameters:
   SplunkIngestUrl:
     Type: String
     Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints."
+  SensitiveDataRegex:
+    Type: String
+    Description: "Regular expression matching sensitive data for further replacement"
+  SensitiveDataReplacement:
+    Type: String
+    Description: "Replacement text for matched sensitive data"
+    Default: "<sensitive-data>"
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
@@ -37,6 +44,8 @@ Metadata:
         Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
         Parameters:
+          - SensitiveDataRegex
+          - SensitiveDataReplacement
           - UseHostedLambdaDeploymentPackage
           - LambdaDeploymentPackageS3Bucket
           - LambdaDeploymentPackageS3Key
@@ -45,6 +54,10 @@ Metadata:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
+      SensitiveDataRegex:
+        default: "RegEx matcher for sensitive data"
+      SensitiveDataReplacement:
+        default: "Replacement text for RegEx-matched sensitive data"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -107,6 +120,8 @@ Resources:
           SPLUNK_API_KEY: !Ref SplunkAccessToken
           SPLUNK_LOG_URL: !Sub '${SplunkIngestUrl}/v1/log'
           SPLUNK_METRIC_URL: !Ref SplunkIngestUrl
+          SENSITIVE_DATA_REGEX: !Ref SensitiveDataRegex
+          SENSITIVE_DATA_REPLACEMENT: !Ref SensitiveDataReplacement
       Role: !GetAtt SplunkAwsLogsCollectorRole.Arn
       Tags:
         - Key: splunk-log-collector-id
