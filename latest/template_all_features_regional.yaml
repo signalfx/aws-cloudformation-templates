@@ -12,6 +12,14 @@ Parameters:
   SplunkIngestUrl:
     Type: String
     Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com."
+  SensitiveDataRegex:
+    Type: String
+    Description: "Regular expression matching sensitive data for further replacement"
+    Default: ""
+  SensitiveDataReplacement:
+    Type: String
+    Description: "Replacement text for matched sensitive data"
+    Default: "<sensitive-data>"
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
@@ -36,6 +44,12 @@ Metadata:
           - SplunkIngestUrl
       -
         Label:
+          default: (Optional) Sensitive data redaction.
+        Parameters:
+          - SensitiveDataRegex
+          - SensitiveDataReplacement
+      -
+        Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
         Parameters:
           - UseHostedLambdaDeploymentPackage
@@ -46,6 +60,10 @@ Metadata:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
+      SensitiveDataRegex:
+        default: "RegEx matcher for sensitive data"
+      SensitiveDataReplacement:
+        default: "Replacement text for RegEx-matched sensitive data"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -63,6 +81,10 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
+        - ParameterKey: SensitiveDataRegex
+          ParameterValue: !Ref SensitiveDataRegex
+        - ParameterKey: SensitiveDataReplacement
+          ParameterValue: !Ref SensitiveDataReplacement
         - ParameterKey: LambdaDeploymentPackageS3Bucket
           ParameterValue: !Ref LambdaDeploymentPackageS3Bucket
         - ParameterKey: LambdaDeploymentPackageS3Key

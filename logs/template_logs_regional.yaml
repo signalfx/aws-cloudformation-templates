@@ -14,6 +14,7 @@ Parameters:
   SensitiveDataRegex:
     Type: String
     Description: "Regular expression matching sensitive data for further replacement"
+    Default: ""
   SensitiveDataReplacement:
     Type: String
     Description: "Replacement text for matched sensitive data"
@@ -42,10 +43,14 @@ Metadata:
           - SplunkIngestUrl
       -
         Label:
-          default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
+          default: (Optional) Sensitive data redaction.
         Parameters:
           - SensitiveDataRegex
           - SensitiveDataReplacement
+      -
+        Label:
+          default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
+        Parameters:
           - UseHostedLambdaDeploymentPackage
           - LambdaDeploymentPackageS3Bucket
           - LambdaDeploymentPackageS3Key
