@@ -21,7 +21,7 @@ Parameters:
   SensitiveDataReplacement:
     Type: String
     Description: "Replacement text for matched sensitive data"
-    Default: "<sensitive-data>"
+    Default: "**REDACTED**"
 
 Metadata:
   AWS::CloudFormation::Interface:

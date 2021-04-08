@@ -19,7 +19,7 @@ Parameters:
   SensitiveDataReplacement:
     Type: String
     Description: "Replacement text for matched sensitive data"
-    Default: "<sensitive-data>"
+    Default: "**REDACTED**"
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
