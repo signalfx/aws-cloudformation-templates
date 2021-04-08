@@ -23,15 +23,15 @@ Metadata:
           default: Required Parameters
         Parameters:
           - SplunkAccessToken
-          - EnabledRegions
           - SplunkIngestUrl
+          - EnabledRegions
     ParameterLabels:
       SplunkAccessToken:
         default: "Access Token"
-      EnabledRegions:
-        default: "Regions to deploy to"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
+      EnabledRegions:
+        default: "Regions to deploy to"
 
 Resources:
 

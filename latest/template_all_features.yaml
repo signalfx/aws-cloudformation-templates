@@ -14,6 +14,14 @@ Parameters:
   EnabledRegions:
     Type: CommaDelimitedList
     Description: "Comma-delimited list of regions where you want to collect logs and metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
+  SensitiveDataRegex:
+    Type: String
+    Description: "Regular expression matching sensitive data for further replacement"
+    Default: ""
+  SensitiveDataReplacement:
+    Type: String
+    Description: "Replacement text for matched sensitive data"
+    Default: "<sensitive-data>"
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -23,15 +31,25 @@ Metadata:
           default: Required Parameters
         Parameters:
           - SplunkAccessToken
-          - EnabledRegions
           - SplunkIngestUrl
+          - EnabledRegions
+      -
+        Label:
+          default: (Optional) Sensitive data redaction.
+        Parameters:
+          - SensitiveDataRegex
+          - SensitiveDataReplacement
     ParameterLabels:
       SplunkAccessToken:
         default: "Access Token"
-      EnabledRegions:
-        default: "Regions to deploy to"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
+      EnabledRegions:
+        default: "Regions to deploy to"
+      SensitiveDataRegex:
+        default: "RegEx matcher for sensitive data"
+      SensitiveDataReplacement:
+        default: "Replacement text for RegEx-matched sensitive data"
 
 Resources:
 
@@ -53,6 +71,10 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
+        - ParameterKey: SensitiveDataRegex
+          ParameterValue: !Ref SensitiveDataRegex
+        - ParameterKey: SensitiveDataReplacement
+          ParameterValue: !Ref SensitiveDataReplacement
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
 
   SplunkMetricStreamsRegionalResources:
