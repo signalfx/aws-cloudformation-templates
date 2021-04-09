@@ -12,13 +12,13 @@ Parameters:
   SplunkIngestUrl:
     Type: String
     Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com."
-  SensitiveDataRegex:
+  RedactionRule:
     Type: String
-    Description: "Regular expression matching sensitive data for further replacement"
+    Description: "Replace text matching the supplied regular expression with **REDACTED** (default) or RedactionRuleReplacement (if supplied)"
     Default: ""
-  SensitiveDataReplacement:
+  RedactionRuleReplacement:
     Type: String
-    Description: "Replacement text for matched sensitive data"
+    Description: "Replace text matching RedactionRule with the supplied text"
     Default: "**REDACTED**"
   UseHostedLambdaDeploymentPackage:
     Type: String
@@ -46,8 +46,8 @@ Metadata:
         Label:
           default: (Optional) Sensitive data redaction.
         Parameters:
-          - SensitiveDataRegex
-          - SensitiveDataReplacement
+          - RedactionRule
+          - RedactionRuleReplacement
       -
         Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
@@ -60,10 +60,10 @@ Metadata:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
-      SensitiveDataRegex:
-        default: "RegEx matcher for sensitive data"
-      SensitiveDataReplacement:
-        default: "Replacement text for RegEx-matched sensitive data"
+      RedactionRule:
+        default: "Replace text matching the supplied regular expression"
+      RedactionRuleReplacement:
+        default: "Replace text matching RedactionRule with the supplied text"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -81,10 +81,10 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
-        - ParameterKey: SensitiveDataRegex
-          ParameterValue: !Ref SensitiveDataRegex
-        - ParameterKey: SensitiveDataReplacement
-          ParameterValue: !Ref SensitiveDataReplacement
+        - ParameterKey: RedactionRule
+          ParameterValue: !Ref RedactionRule
+        - ParameterKey: RedactionRuleReplacement
+          ParameterValue: !Ref RedactionRuleReplacement
         - ParameterKey: LambdaDeploymentPackageS3Bucket
           ParameterValue: !Ref LambdaDeploymentPackageS3Bucket
         - ParameterKey: LambdaDeploymentPackageS3Key

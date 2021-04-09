@@ -14,13 +14,13 @@ Parameters:
   EnabledRegions:
     Type: CommaDelimitedList
     Description: "Comma-delimited list of regions where you want to collect logs. For example: \"us-east-1,eu-central-1,ap-south-1\"."
-  SensitiveDataRegex:
+  RedactionRule:
     Type: String
-    Description: "Regular expression matching sensitive data for further replacement"
+    Description: "Replace text matching the supplied regular expression with **REDACTED** (default) or RedactionRuleReplacement (if supplied)"
     Default: ""
-  SensitiveDataReplacement:
+  RedactionRuleReplacement:
     Type: String
-    Description: "Replacement text for matched sensitive data"
+    Description: "Replace text matching RedactionRule with the supplied text"
     Default: "**REDACTED**"
 
 Metadata:
@@ -37,8 +37,8 @@ Metadata:
         Label:
           default: (Optional) Sensitive data redaction.
         Parameters:
-          - SensitiveDataRegex
-          - SensitiveDataReplacement
+          - RedactionRule
+          - RedactionRuleReplacement
     ParameterLabels:
       SplunkAccessToken:
         default: "Access Token"
@@ -46,10 +46,10 @@ Metadata:
         default: "Real-time Data Ingest endpoint"
       EnabledRegions:
         default: "Regions to deploy to"
-      SensitiveDataRegex:
-        default: "RegEx matcher for sensitive data"
-      SensitiveDataReplacement:
-        default: "Replacement text for RegEx-matched sensitive data"
+      RedactionRule:
+        default: "Replace text matching the supplied regular expression"
+      RedactionRuleReplacement:
+        default: "Replace text matching RedactionRule with the supplied text"
 
 Resources:
   SplunkAwsLogsCollectorRegionalResources:
@@ -70,8 +70,8 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
-        - ParameterKey: SensitiveDataRegex
-          ParameterValue: !Ref SensitiveDataRegex
-        - ParameterKey: SensitiveDataReplacement
-          ParameterValue: !Ref SensitiveDataReplacement
+        - ParameterKey: RedactionRule
+          ParameterValue: !Ref RedactionRule
+        - ParameterKey: RedactionRuleReplacement
+          ParameterValue: !Ref RedactionRuleReplacement
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml

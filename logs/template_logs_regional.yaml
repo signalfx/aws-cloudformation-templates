@@ -11,13 +11,13 @@ Parameters:
   SplunkIngestUrl:
     Type: String
     Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints."
-  SensitiveDataRegex:
+  RedactionRule:
     Type: String
-    Description: "Regular expression matching sensitive data for further replacement"
+    Description: "Replace text matching the supplied regular expression with **REDACTED** (default) or RedactionRuleReplacement (if supplied)"
     Default: ""
-  SensitiveDataReplacement:
+  RedactionRuleReplacement:
     Type: String
-    Description: "Replacement text for matched sensitive data"
+    Description: "Replace text matching RedactionRule with the supplied text"
     Default: "**REDACTED**"
   UseHostedLambdaDeploymentPackage:
     Type: String
@@ -45,8 +45,8 @@ Metadata:
         Label:
           default: (Optional) Sensitive data redaction.
         Parameters:
-          - SensitiveDataRegex
-          - SensitiveDataReplacement
+          - RedactionRule
+          - RedactionRuleReplacement
       -
         Label:
           default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
@@ -59,10 +59,10 @@ Metadata:
         default: "Access Token"
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
-      SensitiveDataRegex:
-        default: "RegEx matcher for sensitive data"
-      SensitiveDataReplacement:
-        default: "Replacement text for RegEx-matched sensitive data"
+      RedactionRule:
+        default: "Replace text matching the supplied regular expression"
+      RedactionRuleReplacement:
+        default: "Replace text matching RedactionRule with the supplied text"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -125,8 +125,8 @@ Resources:
           SPLUNK_API_KEY: !Ref SplunkAccessToken
           SPLUNK_LOG_URL: !Sub '${SplunkIngestUrl}/v1/log'
           SPLUNK_METRIC_URL: !Ref SplunkIngestUrl
-          SENSITIVE_DATA_REGEX: !Ref SensitiveDataRegex
-          SENSITIVE_DATA_REPLACEMENT: !Ref SensitiveDataReplacement
+          REDACTION_RULE: !Ref RedactionRule
+          REDACTION_RULE_REPLACEMENT: !Ref RedactionRuleReplacement
       Role: !GetAtt SplunkAwsLogsCollectorRole.Arn
       Tags:
         - Key: splunk-log-collector-id
