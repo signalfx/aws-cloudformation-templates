@@ -13,11 +13,11 @@ Parameters:
     Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints."
   RedactionRule:
     Type: String
-    Description: "Replace text matching the supplied regular expression with **REDACTED** (default) or RedactionRuleReplacement (if supplied)"
+    Description: "Replace text matching the supplied regular expression with Redaction Rule Replacement."
     Default: ""
   RedactionRuleReplacement:
     Type: String
-    Description: "Replace text matching RedactionRule with the supplied text"
+    Description: "Replace text matching Redaction Rule with the supplied text."
     Default: "**REDACTED**"
   UseHostedLambdaDeploymentPackage:
     Type: String
@@ -60,9 +60,9 @@ Metadata:
       SplunkIngestUrl:
         default: "Real-time Data Ingest endpoint"
       RedactionRule:
-        default: "Replace text matching the supplied regular expression"
+        default: "Redaction Rule"
       RedactionRuleReplacement:
-        default: "Replace text matching RedactionRule with the supplied text"
+        default: "Redaction Rule Replacement"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
