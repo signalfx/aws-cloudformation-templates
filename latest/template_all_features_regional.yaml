@@ -8,29 +8,29 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com."
+    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints.."
   RedactionRule:
     Type: String
-    Description: "Replace text matching the supplied regular expression with Redaction Rule Replacement."
+    Description: "Replace text matching the supplied regular expression with redaction rule replacement."
     Default: ""
   RedactionRuleReplacement:
     Type: String
-    Description: "Replace text matching Redaction Rule with the supplied text."
+    Description: "Replace text matching the redaction rule with the following text."
     Default: "**REDACTED**"
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
-    Description: "Change this to false if you are deploying to Gov or China region. That will make it possible for you to pass a custom location of the zip archive in the following parameters."
+    Description: "Change this to false if you are deploying to Gov or China regions to pass a custom location of the zip archive in other parameters."
   LambdaDeploymentPackageS3Bucket:
     Type: String
-    Description: "S3 bucket where aws-log-collector lambda deployment package is stored. Must be in the same region as this deployment. You should set this only in Gov and China."
+    Description: "Enter the S3 bucket where the aws-log-collector lambda deployment package is stored. It must be in the same region as this deployment. Set the S3 bucket only for Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-bucket\"."
     Default: ""
   LambdaDeploymentPackageS3Key:
     Type: String
-    Description: "Aws-log-collector lambda deployment package path (key) in S3. You should set this only in Gov and China."
+    Description: "Aws-log-collector lambda deployment package path (key) in S3. Set this only in Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-folder/aws-log-collector.zip\"."
     Default: ""
 
 Metadata:
@@ -44,30 +44,30 @@ Metadata:
           - SplunkIngestUrl
       -
         Label:
-          default: (Optional) Sensitive data redaction.
+          default: (Optional) Sensitive data redaction
         Parameters:
           - RedactionRule
           - RedactionRuleReplacement
       -
         Label:
-          default: (Optional) Lambda Deployment Package location. You need to modify this section if you're deploying to Gov or China regions.
+          default: (Optional) Lambda deployment package location. Modify this section if deploying to Gov or China regions.
         Parameters:
           - UseHostedLambdaDeploymentPackage
           - LambdaDeploymentPackageS3Bucket
           - LambdaDeploymentPackageS3Key
     ParameterLabels:
       SplunkAccessToken:
-        default: "Access Token"
+        default: "Access token"
       SplunkIngestUrl:
-        default: "Real-time Data Ingest endpoint"
+        default: "Real-time data ingest endpoint"
       RedactionRule:
-        default: "Redaction Rule"
+        default: "Redaction rule"
       RedactionRuleReplacement:
-        default: "Redaction Rule Replacement"
+        default: "Redaction rule replacement"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
-        default: "S3Bucket with the archive"
+        default: "S3 Bucket with the archive"
       LambdaDeploymentPackageS3Key:
         default: "Path of the archive in the bucket"
 

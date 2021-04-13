@@ -7,20 +7,20 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints."
+    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints."
   EnabledRegions:
     Type: CommaDelimitedList
-    Description: "Comma-delimited list of regions where you want to collect logs. For example: \"us-east-1,eu-central-1,ap-south-1\"."
+    Description: "Enter a comma-delimited list of regions from which you want to collect logs. For example: \"us-east-1,eu-central-1,ap-south-1\"."
   RedactionRule:
     Type: String
-    Description: "Replace text matching the supplied regular expression with Redaction Rule Replacement."
+    Description: "Replace text matching the supplied regular expression with redaction rule replacement."
     Default: ""
   RedactionRuleReplacement:
     Type: String
-    Description: "Replace text matching Redaction Rule with the supplied text."
+    Description: "Replace text matching the redaction rule with the following text."
     Default: "**REDACTED**"
 
 Metadata:
@@ -35,21 +35,21 @@ Metadata:
           - EnabledRegions
       -
         Label:
-          default: (Optional) Sensitive data redaction.
+          default: (Optional) Sensitive data redaction
         Parameters:
           - RedactionRule
           - RedactionRuleReplacement
     ParameterLabels:
       SplunkAccessToken:
-        default: "Access Token"
+        default: "Access token"
       SplunkIngestUrl:
-        default: "Real-time Data Ingest endpoint"
+        default: "Real-time data ingest endpoint"
       EnabledRegions:
         default: "Regions to deploy to"
       RedactionRule:
-        default: "Redaction Rule"
+        default: "Redaction rule"
       RedactionRuleReplacement:
-        default: "Redaction Rule Replacement"
+        default: "Redaction rule replacement"
 
 Resources:
   SplunkAwsLogsCollectorRegionalResources:
