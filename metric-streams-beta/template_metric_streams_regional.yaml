@@ -7,10 +7,10 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest URL can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com"
+    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints."
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -23,9 +23,9 @@ Metadata:
           - SplunkIngestUrl
     ParameterLabels:
       SplunkAccessToken:
-        default: "Access Token"
+        default: "Access token"
       SplunkIngestUrl:
-        default: "Real-time Data Ingest endpoint"
+        default: "Real-time data ingest endpoint"
 
 Resources:
   SplunkMetricStreamsS3:

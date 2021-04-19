@@ -7,13 +7,21 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Splunk Observability Access Token. You should have copied it in the previous step from the integration configuration. You can also find it in Organization Settings --> Access Tokens."
+    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Real-time Data Ingest url can be found in your Profile --> Account Settings --> Endpoints. The field value should follow the pattern: https://ingest.${REALM}.signalfx.com"
+    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints."
   EnabledRegions:
     Type: CommaDelimitedList
-    Description: "Comma-delimited list of regions where you want to collect logs and metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
+    Description: "Enter a comma-delimited list of regions from which you want to collect logs and metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
+  RedactionRule:
+    Type: String
+    Description: "Replace text matching the supplied regular expression with redaction rule replacement."
+    Default: ""
+  RedactionRuleReplacement:
+    Type: String
+    Description: "Replace text matching the redaction rule with the following text."
+    Default: "**REDACTED**"
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -23,15 +31,25 @@ Metadata:
           default: Required Parameters
         Parameters:
           - SplunkAccessToken
-          - EnabledRegions
           - SplunkIngestUrl
+          - EnabledRegions
+      -
+        Label:
+          default: (Optional) Sensitive data redaction
+        Parameters:
+          - RedactionRule
+          - RedactionRuleReplacement
     ParameterLabels:
       SplunkAccessToken:
-        default: "Access Token"
+        default: "Access token"
+      SplunkIngestUrl:
+        default: "Real-time data ingest endpoint"
       EnabledRegions:
         default: "Regions to deploy to"
-      SplunkIngestUrl:
-        default: "Real-time Data Ingest endpoint"
+      RedactionRule:
+        default: "Redaction rule"
+      RedactionRuleReplacement:
+        default: "Redaction rule replacement"
 
 Resources:
 
@@ -53,6 +71,10 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
+        - ParameterKey: RedactionRule
+          ParameterValue: !Ref RedactionRule
+        - ParameterKey: RedactionRuleReplacement
+          ParameterValue: !Ref RedactionRuleReplacement
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
 
   SplunkMetricStreamsRegionalResources:
