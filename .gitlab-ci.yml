@@ -41,4 +41,5 @@ upload-release: # replace all /test links with /release and copy artifacts to S3
 
 stages:
   - lint
+  - init-release
   - release
