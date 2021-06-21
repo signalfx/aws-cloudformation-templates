@@ -1,0 +1,47 @@
+default:
+  image: cimg/python:3.8
+
+lint:
+  stage: lint
+  script: |
+    python3 -m venv venv
+    . venv/bin/activate
+    pip3 install cfn-lint
+    cfn-lint **/template_*.yaml
+
+init-release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script: |
+    apt-get -y install make
+
+upload-test: # copy artifacts to S3
+  stage: release
+  dependencies:
+    - init-release
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script: export ENV=test && make release-to-env
+  rules:
+    - if: '$CI_COMMIT_BRANCH != "main"'
+
+upload-stage: # replace all /test links with /stage and copy artifacts to S3
+  stage: release
+  dependencies:
+    - init-release
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script: export ENV=stage && make release-to-env
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+upload-release: # replace all /test links with /release and copy artifacts to S3 + make them publicly available
+  stage: release
+  dependencies:
+    - init-release
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script: export ENV=release && make release-to-env
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+.*/'
+
+stages:
+  - lint
+  - release

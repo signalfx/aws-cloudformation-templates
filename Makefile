@@ -46,10 +46,10 @@ $(template_files):
 release-to-env: $(template_files)
 	cd $(BIN_DIR)/$(ENV); ls | xargs sed -i 's/aws-cloudformation-templates\/test/aws-cloudformation-templates\/$(ENV)/g'
 	cd $(BIN_DIR)/$(ENV); ls | xargs sed -i '1,2d'
-	cd $(BIN_DIR)/$(ENV); ls | xargs -I FILENAME aws s3 --profile $(AWS_PROFILE) --region us-east-1 cp FILENAME s3://o11y-public/aws-cloudformation-templates/$(ENV)/FILENAME
+	cd $(BIN_DIR)/$(ENV); ls | xargs -I FILENAME aws s3 --region us-east-1 cp FILENAME s3://o11y-public/aws-cloudformation-templates/$(ENV)/FILENAME
 	if [ "$(ENV)" = "release" ] || [ "true" = "$(FORCE_PUBLISH)" ]; then \
   	cd $(BIN_DIR)/$(ENV); \
-	ls | xargs -I FILENAME aws s3api --profile $(AWS_PROFILE) --region us-east-1 put-object-acl --bucket o11y-public --key aws-cloudformation-templates/$(ENV)/FILENAME --acl public-read; \
+	ls | xargs -I FILENAME aws s3api --region us-east-1 put-object-acl --bucket o11y-public --key aws-cloudformation-templates/$(ENV)/FILENAME --acl public-read; \
 	fi
 
 quicklinks:
