@@ -10,15 +10,16 @@ lint:
     cfn-lint **/template_*.yaml
 
 init-release:
-  stage: release
+  stage: init-release
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script: |
     apt-get -y install make
+  artifacts:
+    paths:
+      - usr/bin/make
 
 upload-test: # copy artifacts to S3
   stage: release
-  dependencies:
-    - init-release
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script: export ENV=test && make release-to-env
   rules:
@@ -26,8 +27,6 @@ upload-test: # copy artifacts to S3
 
 upload-stage: # replace all /test links with /stage and copy artifacts to S3
   stage: release
-  dependencies:
-    - init-release
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script: export ENV=stage && make release-to-env
   rules:
@@ -35,8 +34,6 @@ upload-stage: # replace all /test links with /stage and copy artifacts to S3
 
 upload-release: # replace all /test links with /release and copy artifacts to S3 + make them publicly available
   stage: release
-  dependencies:
-    - init-release
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script: export ENV=release && make release-to-env
   rules:
