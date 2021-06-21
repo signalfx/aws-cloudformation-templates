@@ -16,7 +16,7 @@ init-release:
     apt-get -y install make
   artifacts:
     paths:
-      - usr/bin/make
+      - /usr/bin/make
 
 upload-test: # copy artifacts to S3
   stage: release
