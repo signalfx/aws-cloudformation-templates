@@ -66,3 +66,4 @@ There is no hosted deployment package in AWS China and Gov regions, so prior to 
 | LambdaDeploymentPackageS3Bucket | The name of S3 bucket where you host .zip archive with Lambda code. For example, if the ARN of your archive is `arn:aws:s3:::my-bucket/my-folder/aws-log-collector.zip`, the value of this parameter is `my-bucket`. You need to pass this parameter in Gov and China.  |
 | LambdaDeploymentPackageS3Key | The path to the .zip archive with Lambda code in your S3 bucket. For example, if the ARN of your archive is `arn:aws:s3:::my-bucket/my-folder/aws-log-collector.zip`, the value of this parameter should be `my-folder/aws-log-collector.zip`. You need to pass this parameter in Gov and China.  |
 
+
