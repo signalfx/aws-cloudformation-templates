@@ -77,26 +77,17 @@ Resources:
     Properties:
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
       Parameters:
-        - ParameterKey: SplunkAccessToken
-          ParameterValue: !Ref SplunkAccessToken
-        - ParameterKey: SplunkIngestUrl
-          ParameterValue: !Ref SplunkIngestUrl
-        - ParameterKey: RedactionRule
-          ParameterValue: !Ref RedactionRule
-        - ParameterKey: RedactionRuleReplacement
-          ParameterValue: !Ref RedactionRuleReplacement
-        - ParameterKey: LambdaDeploymentPackageS3Bucket
-          ParameterValue: !Ref LambdaDeploymentPackageS3Bucket
-        - ParameterKey: LambdaDeploymentPackageS3Key
-          ParameterValue: !Ref LambdaDeploymentPackageS3Key
-        - ParameterKey: UseHostedLambdaDeploymentPackage
-          ParameterValue: !Ref UseHostedLambdaDeploymentPackage
+        SplunkAccessToken: !Ref SplunkAccessToken
+        SplunkIngestUrl: !Ref SplunkIngestUrl
+        RedactionRule: !Ref RedactionRule
+        RedactionRuleReplacement: !Ref RedactionRuleReplacement
+        LambdaDeploymentPackageS3Bucket: !Ref LambdaDeploymentPackageS3Bucket
+        LambdaDeploymentPackageS3Key: !Ref LambdaDeploymentPackageS3Key
+        UseHostedLambdaDeploymentPackage: !Ref UseHostedLambdaDeploymentPackage
   SplunkAwsMetricStreams:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
       Parameters:
-        - ParameterKey: SplunkAccessToken
-          ParameterValue: !Ref SplunkAccessToken
-        - ParameterKey: SplunkIngestUrl
-          ParameterValue: !Ref SplunkIngestUrl
+        SplunkAccessToken: !Ref SplunkAccessToken
+        SplunkIngestUrl: !Ref SplunkIngestUrl
