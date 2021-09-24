@@ -74,17 +74,6 @@ Resources:
                 Resource:
                   - !Sub '${SplunkMetricStreamsS3.Arn}'
                   - !Sub '${SplunkMetricStreamsS3.Arn}/*'
-        - PolicyName: kinesis_access
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'kinesis:DescribeStream'
-                  - 'kinesis:GetShardIterator'
-                  - 'kinesis:GetRecords'
-                  - 'kinesis:ListShards'
-                Resource: !Sub 'arn:aws:kinesis:${AWS::Region}:${AWS::AccountId}:stream/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%'
         - PolicyName: logs_access
           PolicyDocument:
             Version: 2012-10-17
