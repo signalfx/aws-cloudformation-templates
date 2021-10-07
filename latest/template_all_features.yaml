@@ -22,6 +22,10 @@ Parameters:
     Type: String
     Description: "Replace text matching the redaction rule with the following text."
     Default: "**REDACTED**"
+  IncludeLogFields:
+    Type: String
+    Description: "Include fields parsed from S3-located log files lines. Allowed options: true, false."
+    Default: "false"
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -39,6 +43,11 @@ Metadata:
         Parameters:
           - RedactionRule
           - RedactionRuleReplacement
+      -
+        Label:
+          default: (Optional) Additional fields from S3 log files
+        Parameters:
+          - IncludeLogFields
     ParameterLabels:
       SplunkAccessToken:
         default: "Access token"
@@ -50,6 +59,8 @@ Metadata:
         default: "Redaction rule"
       RedactionRuleReplacement:
         default: "Redaction rule replacement"
+      IncludeLogFields:
+        default: "Include log fields"
 
 Resources:
 
