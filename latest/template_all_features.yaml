@@ -86,6 +86,8 @@ Resources:
           ParameterValue: !Ref RedactionRule
         - ParameterKey: RedactionRuleReplacement
           ParameterValue: !Ref RedactionRuleReplacement
+        - ParameterKey: IncludeLogFields
+          ParameterValue: !Ref IncludeLogFields
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
 
   SplunkMetricStreamsRegionalResources:

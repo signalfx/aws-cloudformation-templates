@@ -92,6 +92,7 @@ Resources:
         SplunkIngestUrl: !Ref SplunkIngestUrl
         RedactionRule: !Ref RedactionRule
         RedactionRuleReplacement: !Ref RedactionRuleReplacement
+        IncludeLogFields: !Ref IncludeLogFields
         LambdaDeploymentPackageS3Bucket: !Ref LambdaDeploymentPackageS3Bucket
         LambdaDeploymentPackageS3Key: !Ref LambdaDeploymentPackageS3Key
         UseHostedLambdaDeploymentPackage: !Ref UseHostedLambdaDeploymentPackage
