@@ -21,7 +21,7 @@ Parameters:
     Default: "**REDACTED**"
   IncludeLogFields:
     Type: String
-    Description: "Include fields parsed from S3-located log files lines. Allowed options: true, false."
+    Description: "Include fields parsed from logs stored in S3 buckets (true/false)"
     Default: "false"
   UseHostedLambdaDeploymentPackage:
     Type: String
