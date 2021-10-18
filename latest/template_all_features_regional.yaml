@@ -22,7 +22,7 @@ Parameters:
     Default: "**REDACTED**"
   IncludeLogFields:
     Type: String
-    Description: "Include fields parsed from logs stored in S3 buckets (true/false)"
+    Description: "If this is set to \"false\", the function will forward only raw log line from the source. If set to \"true\", the function will forward both the raw log line and fields it parsed out from the line. The default value of \"false\" is meant to reduce log volume"
     Default: "false"
   UseHostedLambdaDeploymentPackage:
     Type: String
