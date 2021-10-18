@@ -20,6 +20,10 @@ Parameters:
     Type: String
     Description: "Replace text matching the redaction rule with the following text."
     Default: "**REDACTED**"
+  IncludeLogFields:
+    Type: String
+    Description: "If this is set to \"false\", the function will forward only raw log line from the source. If set to \"true\", the function will forward both the raw log line and fields it parsed out from the line. The default value of \"false\" is meant to reduce log volume"
+    Default: "false"
   UseHostedLambdaDeploymentPackage:
     Type: String
     Default: "true"
@@ -50,6 +54,11 @@ Metadata:
           - RedactionRuleReplacement
       -
         Label:
+          default: (Optional) Additional fields from S3 log files
+        Parameters:
+          - IncludeLogFields
+      -
+        Label:
           default: (Optional) Lambda deployment package location. Modify this section if deploying to Gov or China regions.
         Parameters:
           - UseHostedLambdaDeploymentPackage
@@ -64,6 +73,8 @@ Metadata:
         default: "Redaction rule"
       RedactionRuleReplacement:
         default: "Redaction rule replacement"
+      IncludeLogFields:
+        default: "Include log fields"
       UseHostedLambdaDeploymentPackage:
         default: "Use Splunk-hosted archive with lambda code"
       LambdaDeploymentPackageS3Bucket:
@@ -81,6 +92,7 @@ Resources:
         SplunkIngestUrl: !Ref SplunkIngestUrl
         RedactionRule: !Ref RedactionRule
         RedactionRuleReplacement: !Ref RedactionRuleReplacement
+        IncludeLogFields: !Ref IncludeLogFields
         LambdaDeploymentPackageS3Bucket: !Ref LambdaDeploymentPackageS3Bucket
         LambdaDeploymentPackageS3Key: !Ref LambdaDeploymentPackageS3Key
         UseHostedLambdaDeploymentPackage: !Ref UseHostedLambdaDeploymentPackage

@@ -22,6 +22,10 @@ Parameters:
     Type: String
     Description: "Replace text matching the redaction rule with the following text."
     Default: "**REDACTED**"
+  IncludeLogFields:
+    Type: String
+    Description: "If this is set to \"false\", the function will forward only raw log line from the source. If set to \"true\", the function will forward both the raw log line and fields it parsed out from the line. The default value of \"false\" is meant to reduce log volume"
+    Default: "false"
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -39,6 +43,11 @@ Metadata:
         Parameters:
           - RedactionRule
           - RedactionRuleReplacement
+      -
+        Label:
+          default: (Optional) Additional fields from S3 log files
+        Parameters:
+          - IncludeLogFields
     ParameterLabels:
       SplunkAccessToken:
         default: "Access token"
@@ -50,6 +59,8 @@ Metadata:
         default: "Redaction rule"
       RedactionRuleReplacement:
         default: "Redaction rule replacement"
+      IncludeLogFields:
+        default: "Include log fields"
 
 Resources:
 
@@ -75,6 +86,8 @@ Resources:
           ParameterValue: !Ref RedactionRule
         - ParameterKey: RedactionRuleReplacement
           ParameterValue: !Ref RedactionRuleReplacement
+        - ParameterKey: IncludeLogFields
+          ParameterValue: !Ref IncludeLogFields
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_logs_regional.yaml
 
   SplunkMetricStreamsRegionalResources:
