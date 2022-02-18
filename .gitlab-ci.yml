@@ -9,14 +9,17 @@ lint:
     pip3 install cfn-lint
     cfn-lint **/template_*.yaml
 
-upload-test: # copy artifacts to S3
-  stage: release
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  script: |
-    apt-get -y install make
-    export ENV=test && make release-to-env
-  rules:
-    - if: '$CI_COMMIT_BRANCH != "main"'
+# Disabled "upload-test" as we do not want the AWS RND credentials to be used outside the main branch.
+# We can enable this back when we move those credentials to a secret manager (e.g. Hashicorp Vault)
+
+#upload-test: # copy artifacts to S3
+#  stage: release
+#  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#  script: |
+#    apt-get -y install make
+#    export ENV=test && make release-to-env
+#  rules:
+#    - if: '$CI_COMMIT_BRANCH != "main"'
 
 upload-stage: # replace all /test links with /stage and copy artifacts to S3
   stage: release
