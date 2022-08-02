@@ -48,7 +48,7 @@ Resources:
   SplunkMetricStreamsS3Role:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub 'splunk-metric-streams-s3-${AWS::Region}'
+      RoleName: !Sub 'splunk-metric-streams-s3-${AWS::Region}' #DO NOT CHANGE the role name unless you are also going to change the AWS IAM policy used by the CloudWatch Metric Streams
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -120,7 +120,7 @@ Resources:
   SplunkMetricStreamRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub 'splunk-metric-streams-${AWS::Region}'
+      RoleName: !Sub 'splunk-metric-streams-${AWS::Region}' #DO NOT CHANGE the role name unless you are also going to change the AWS IAM policy used by the CloudWatch Metric Streams
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
