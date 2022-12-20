@@ -8,7 +8,7 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Copy your Splunk Observability access token having INGEST authorization scope from Settings > Access Tokens."
+    Description: "Copy your Splunk Observability access token with INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
     Description: "Find the real-time data ingest endpoint in Settings > Profile > Organizations.."
