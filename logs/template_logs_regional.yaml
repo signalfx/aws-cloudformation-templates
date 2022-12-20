@@ -7,10 +7,10 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
+    Description: "Copy your Splunk Observability access token having INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints."
+    Description: "Find the real-time data ingest endpoint in Settings > Profile > Organizations."
   RedactionRule:
     Type: String
     Description: "Replace text matching the supplied regular expression with redaction rule replacement."

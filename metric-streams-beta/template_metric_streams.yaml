@@ -7,10 +7,10 @@ Parameters:
   SplunkAccessToken:
     Type: String
     NoEcho: true
-    Description: "Copy your Splunk Observability access token from the Observability Cloud AWS integration wizard. You can also find it in Profile > Organization Settings > Access Tokens."
+    Description: "Copy your Splunk Observability access token having INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints."
+    Description: "Find the real-time data ingest endpoint in Settings > Profile > Organizations."
   EnabledRegions:
     Type: CommaDelimitedList
     Description: "Enter a comma-delimited list of regions from which you want to collect metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
