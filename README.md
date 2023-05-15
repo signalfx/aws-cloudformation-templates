@@ -59,7 +59,7 @@ There is no hosted deployment package in AWS China and Gov regions, so prior to 
 |Parameter |Value |
 | ---------|:-------------|
 | SplunkAccessToken | the Access Token from your Splunk Observability organization   |
-| SplunkIngestUrl | Real-time Data Ingest url from your account. In our example, the value would be `https://ingest.us0.signalfx.com`. Splunk uses this to ingest logs, metrics and to monitor the usage and adoption of aws-collector-lambda.   |
+| SplunkIngestUrl | Real-time Data Ingest url from your account. In our example, the value would be `https://ingest.us0.signalfx.com`. Splunk uses this to ingest logs, metrics and to monitor the usage and adoption of aws-collector-lambda. <br/> <br/> Note: do NOT include endpoint path here: for instance use `https://ingest.us0.signalfx.com` instead of `https://ingest.us0.signalfx.com/v1/cloudwatch_metric_stream`.  |
 | UseHostedLambdaDeploymentPackage | Change this to false if you want to use .zip archive hosted in your S3 bucket. You need to do this in Gov and China.   |
 | RedactionRule | Replace text matching the supplied regular expression with `**REDACTED**` (default) or RedactionRuleReplacement   |
 | RedactionRuleReplacement | Replace text matching RedactionRule with the supplied text, this parameter is taken into account only if RedactionRule is not blank   |
