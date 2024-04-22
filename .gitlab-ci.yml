@@ -1,5 +1,14 @@
+include:
+  - project: 'ci-cd/templates'
+    ref: master
+    file: '/prodsec/.oss-scan.yml'
+
 default:
   image: cimg/python:3.8
+
+oss-scan:
+  stage: lint
+  extends: .oss-scan
 
 lint:
   stage: lint
