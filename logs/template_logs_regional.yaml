@@ -125,7 +125,7 @@ Resources:
     Properties:
       Description: Splunk AWS Log Collector
       FunctionName: 'splunk-aws-logs-collector'
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 60
       Code:
         S3Bucket: !If [UseHostedDeploymentPackageCondition, !Sub 'o11y-public-${AWS::Region}', !Ref LambdaDeploymentPackageS3Bucket ]
