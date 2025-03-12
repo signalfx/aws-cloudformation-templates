@@ -10,7 +10,7 @@ Parameters:
     Description: "Copy your Splunk Observability access token with INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints. Note: do NOT include endpoint path here: for instance use https://ingest.us1.signalfx.com instead of https://ingest.us1.signalfx.com/v1/log."
+    Description: "Find the \"Real-time Data Ingest Endpoint\" in My Profile > Organizations > Endpoints."
   RedactionRule:
     Type: String
     Description: "Replace text matching the supplied regular expression with redaction rule replacement."
