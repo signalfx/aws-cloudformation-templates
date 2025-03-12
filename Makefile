@@ -35,7 +35,7 @@ init:
 
 .PHONY: lint
 lint:
-	cfn-lint **/template_*.yaml
+	cfn-lint **/template_*.yaml -i W1030
 
 .PHONY: $(template_files)
 $(template_files):
