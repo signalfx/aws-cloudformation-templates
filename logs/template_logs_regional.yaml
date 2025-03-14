@@ -30,11 +30,11 @@ Parameters:
   LambdaDeploymentPackageS3Bucket:
     Type: String
     Description: "Enter the S3 bucket where the aws-log-collector lambda deployment package is stored. It must be in the same region as this deployment. Set the S3 bucket only for Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-bucket\"."
-    Default: ""
+    Default: "Set for Gov and China regions, leave blank otherwise"
   LambdaDeploymentPackageS3Key:
     Type: String
     Description: "Aws-log-collector lambda deployment package path (key) in S3. Set this only in Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-folder/aws-log-collector.zip\"."
-    Default: ""
+    Default: "Set for Gov and China regions, leave blank otherwise"
 
 Metadata:
   AWS::CloudFormation::Interface:
