@@ -10,7 +10,7 @@ Parameters:
     Description: "Copy your Splunk Observability access token with INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Find the real-time data ingest URL in Profile > Account Settings > Endpoints. Note: do NOT include endpoint path here: for instance use https://ingest.us1.signalfx.com instead of https://ingest.us1.signalfx.com/v1/log."
+    Description: "Find the \"Real-time Data Ingest Endpoint\" in My Profile > Organizations > Endpoints."
   RedactionRule:
     Type: String
     Description: "Replace text matching the supplied regular expression with redaction rule replacement."
@@ -30,11 +30,11 @@ Parameters:
   LambdaDeploymentPackageS3Bucket:
     Type: String
     Description: "Enter the S3 bucket where the aws-log-collector lambda deployment package is stored. It must be in the same region as this deployment. Set the S3 bucket only for Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-bucket\"."
-    Default: "Set_for_Gov_and_China_regions_leave_blank_otherwise"
+    Default: ""
   LambdaDeploymentPackageS3Key:
     Type: String
     Description: "Aws-log-collector lambda deployment package path (key) in S3. Set this only in Gov and China regions. For example, if the ARN of your archive is \"arn:aws:s3::::my-bucket/my-folder/aws-log-collector.zip\", the value of this parameter is \"my-folder/aws-log-collector.zip\"."
-    Default: "Set_for_Gov_and_China_regions_leave_blank_otherwise"
+    Default: ""
 
 Metadata:
   AWS::CloudFormation::Interface:
