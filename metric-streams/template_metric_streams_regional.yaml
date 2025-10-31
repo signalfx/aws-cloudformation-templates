@@ -10,7 +10,7 @@ Parameters:
     Description: "Copy your Splunk Observability access token with INGEST authorization scope from Settings > Access Tokens."
   SplunkIngestUrl:
     Type: String
-    Description: "Find the \"Real-time Data Ingest Endpoint\" in My Profile > Organizations > Endpoints."
+    Description: "Find the \"Real-time Data Ingest Endpoint\" in My Profile > Organizations."
 
 Metadata:
   AWS::CloudFormation::Interface:
