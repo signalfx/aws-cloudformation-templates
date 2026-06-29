@@ -11,6 +11,37 @@ Parameters:
   SplunkIngestUrl:
     Type: String
     Description: "Find the \"Real-time Data Ingest Endpoint\" in My Profile > Organizations."
+  EnableServerSideEncryption:
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+    Description: "Enable server-side encryption (SSE) at rest on the Kinesis Data Firehose delivery stream."
+  FirehoseEncryptionKeyARN:
+    Type: String
+    Default: ""
+    Description: "Optional ARN of an existing customer-managed KMS key to use for delivery stream encryption. Leave blank to use an AWS-owned key or to create a new key (see CreateEncryptionKey). The key must be symmetric and in the same region as this stack. Its key policy must allow the producer role (splunk-metric-streams-<region>), kms:GenerateDataKey, kms:Decrypt, and allow the firehose.amazonaws.com service principal kms:CreateGrant (required for stream creation). Only applies when EnableServerSideEncryption is true."
+  CreateEncryptionKey:
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+    Description: "Create a new customer-managed KMS key for delivery stream encryption. Only applies when EnableServerSideEncryption is true and FirehoseEncryptionKeyARN is left blank."
+
+Conditions:
+  ServerSideEncryptionEnabled: !Equals [!Ref EnableServerSideEncryption, "true"]
+  HasCustomerManagedKey: !Not [!Equals [!Ref FirehoseEncryptionKeyARN, ""]]
+  CreateEncryptionKeyCondition: !And
+    - !Condition ServerSideEncryptionEnabled
+    - !Equals [!Ref CreateEncryptionKey, "true"]
+    - !Equals [!Ref FirehoseEncryptionKeyARN, ""]
+  UseCustomerManagedKey: !And
+    - !Condition ServerSideEncryptionEnabled
+    - !Or
+      - !Condition HasCustomerManagedKey
+      - !Condition CreateEncryptionKeyCondition
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -21,13 +52,69 @@ Metadata:
         Parameters:
           - SplunkAccessToken
           - SplunkIngestUrl
+      -
+        Label:
+          default: Encryption
+        Parameters:
+          - EnableServerSideEncryption
+          - FirehoseEncryptionKeyARN
+          - CreateEncryptionKey
     ParameterLabels:
       SplunkAccessToken:
         default: "Access token"
       SplunkIngestUrl:
         default: "Real-time data ingest endpoint"
+      EnableServerSideEncryption:
+        default: "Enable server-side encryption"
+      FirehoseEncryptionKeyARN:
+        default: "Customer-managed KMS key ARN (optional)"
+      CreateEncryptionKey:
+        default: "Create a new KMS key (otherwise uses AWS-owned key)"
 
 Resources:
+  SplunkMetricStreamsEncryptionKey:
+    Type: AWS::KMS::Key
+    Condition: CreateEncryptionKeyCondition
+    Properties:
+      Description: !Sub 'Customer-managed key for Splunk metric streams Firehose encryption in ${AWS::Region}'
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: 2012-10-17
+        Statement:
+          - Sid: EnableIAMUserPermissions
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
+            Action: 'kms:*'
+            Resource: '*'
+          - Sid: AllowFirehoseUseOfTheKey
+            Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action:
+              - 'kms:GenerateDataKey'
+              - 'kms:Decrypt'
+            Resource: '*'
+            Condition:
+              StringEquals:
+                kms:CallerAccount: !Ref 'AWS::AccountId'
+                kms:ViaService: !Sub 'firehose.${AWS::Region}.amazonaws.com'
+          - Sid: AllowFirehoseToCreateGrants
+            Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: 'kms:CreateGrant'
+            Resource: '*'
+            Condition:
+              Bool:
+                kms:GrantIsForAWSResource: 'true'
+              StringEquals:
+                kms:CallerAccount: !Ref 'AWS::AccountId'
+                kms:ViaService: !Sub 'firehose.${AWS::Region}.amazonaws.com'
+      Tags:
+        - Key: splunk-metric-streams-key
+          Value: !Sub '${AWS::Region}'
+
   SplunkMetricStreamsS3:
     Type: AWS::S3::Bucket
     Properties:
@@ -90,6 +177,14 @@ Resources:
     Properties:
       DeliveryStreamType: DirectPut
       DeliveryStreamName: !Sub 'splunk-metric-streams-${AWS::Region}'
+      DeliveryStreamEncryptionConfigurationInput: !If
+        - ServerSideEncryptionEnabled
+        - KeyType: !If [UseCustomerManagedKey, "CUSTOMER_MANAGED_CMK", "AWS_OWNED_CMK"]
+          KeyARN: !If
+            - HasCustomerManagedKey
+            - !Ref FirehoseEncryptionKeyARN
+            - !If [CreateEncryptionKeyCondition, !GetAtt SplunkMetricStreamsEncryptionKey.Arn, !Ref "AWS::NoValue"]
+        - !Ref "AWS::NoValue"
       HttpEndpointDestinationConfiguration:
         RoleARN: !GetAtt SplunkMetricStreamsS3Role.Arn
         BufferingHints:
@@ -141,6 +236,21 @@ Resources:
                   - 'firehose:PutRecord'
                   - 'firehose:PutRecordBatch'
                 Resource: !GetAtt SplunkMetricStreamsKinesisFirehose.Arn
+        - !If
+          - UseCustomerManagedKey
+          - PolicyName: firehose_kms
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - 'kms:GenerateDataKey'
+                    - 'kms:Decrypt'
+                  Resource: !If
+                    - HasCustomerManagedKey
+                    - !Ref FirehoseEncryptionKeyARN
+                    - !GetAtt SplunkMetricStreamsEncryptionKey.Arn
+          - !Ref "AWS::NoValue"
       Description: 'A role that allows CloudWatch MetricStreams to publish to Kinesis Firehose'
       Tags:
         - Key: splunk-metric-streams-role
