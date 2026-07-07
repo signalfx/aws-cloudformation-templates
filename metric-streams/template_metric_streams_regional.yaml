@@ -21,7 +21,7 @@ Parameters:
   FirehoseEncryptionKeyARN:
     Type: String
     Default: ""
-    Description: "Optional ARN of an existing customer-managed KMS key to use for delivery stream encryption. Leave blank to use an AWS-owned key or to create a new key (see CreateEncryptionKey). The key must be symmetric and in the same region as this stack. Its key policy must allow the producer role (splunk-metric-streams-<region>), kms:GenerateDataKey, kms:Decrypt, and allow the firehose.amazonaws.com service principal kms:CreateGrant (required for stream creation). Only applies when EnableServerSideEncryption is true."
+    Description: "Optional ARN of an existing customer-managed KMS key to use for delivery stream encryption. Leave blank to use an AWS-owned key or to create a new key (see CreateEncryptionKey). The key must be symmetric and in the same region as this stack. Its key policy must allow the producer role (splunk-metric-streams-<region>) kms:GenerateDataKey, kms:Decrypt, and allow the firehose.amazonaws.com service principal kms:CreateGrant (required for stream creation). Only applies when EnableServerSideEncryption is true."
   CreateEncryptionKey:
     Type: String
     AllowedValues:
