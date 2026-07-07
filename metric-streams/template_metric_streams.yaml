@@ -14,6 +14,20 @@ Parameters:
   EnabledRegions:
     Type: CommaDelimitedList
     Description: "Enter a comma-delimited list of regions from which you want to collect metric streams. For example: \"us-east-1,eu-central-1,ap-south-1\"."
+  EnableServerSideEncryption:
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+    Description: "Enable server-side encryption (SSE) at rest on the Kinesis Data Firehose delivery streams."
+  CreateEncryptionKey:
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+    Description: "Create a new customer-managed KMS key per region for delivery stream encryption. Only applies when EnableServerSideEncryption is true. To use an existing customer-managed key instead, deploy template_metric_streams_regional.yaml per region and set its FirehoseEncryptionKeyARN parameter, since a KMS key is regional and cannot be shared across the regions deployed by this StackSet."
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -25,6 +39,12 @@ Metadata:
           - SplunkAccessToken
           - SplunkIngestUrl
           - EnabledRegions
+      -
+        Label:
+          default: Encryption
+        Parameters:
+          - EnableServerSideEncryption
+          - CreateEncryptionKey
     ParameterLabels:
       SplunkAccessToken:
         default: "Access token"
@@ -32,6 +52,10 @@ Metadata:
         default: "Real-time data ingest endpoint"
       EnabledRegions:
         default: "Regions to deploy to"
+      EnableServerSideEncryption:
+        default: "Enable server-side encryption"
+      CreateEncryptionKey:
+        default: "Create a new KMS key"
 
 Resources:
 
@@ -53,4 +77,8 @@ Resources:
           ParameterValue: !Ref SplunkAccessToken
         - ParameterKey: SplunkIngestUrl
           ParameterValue: !Ref SplunkIngestUrl
+        - ParameterKey: EnableServerSideEncryption
+          ParameterValue: !Ref EnableServerSideEncryption
+        - ParameterKey: CreateEncryptionKey
+          ParameterValue: !Ref CreateEncryptionKey
       TemplateURL: https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/test/template_metric_streams_regional.yaml
