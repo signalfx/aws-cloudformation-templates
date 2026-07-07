@@ -1,5 +1,5 @@
 #====== DO NOT DEPLOY THIS FILE. =======================================================================================
-#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_metric_streams.yaml
+#====== USE PACKAGED VERSION https://o11y-public.s3.amazonaws.com/aws-cloudformation-templates/release/template_metric_streams_regional.yaml
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Regional resources for Splunk AWS Metric Streams Integration.
 
